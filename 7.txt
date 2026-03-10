@@ -1,0 +1,54 @@
+7
+# Define rainfall data
+rainfall <- c(799, 1174.8, 865.1, 1334.6, 635.4, 918.5, 685.5, 998.6, 784.2, 985, 882.8, 1071) [cite: 4]
+
+# Create a time series starting in January 2012 with monthly frequency
+rainfall.timeseries <- ts(rainfall, start = c(2012, 1), frequency = 12) [cite: 4]
+
+# Print the time series
+print(rainfall.timeseries) [cite: 4]
+
+
+
+8
+# Load iris dataset and remove the 'Species' column for unsupervised learning
+newiris <- iris [cite: 2]
+newiris$Species <- NULL [cite: 2]
+
+# Perform K-means clustering with 3 clusters
+(ka <- kmeans(newiris, 3)) [cite: 2]
+
+
+
+9
+# Define height (x) and weight (y) data
+x <- c(151, 174, 138, 186, 128, 136, 179, 163, 152, 131) [cite: 1]
+y <- c(63, 81, 56, 91, 47, 57, 76, 72, 62, 48) [cite: 1]
+
+# Fit the linear model
+relation <- lm(y ~ x) [cite: 1, 3]
+
+# Predict weight for a height of 170 cm
+a <- data.frame(x = 170) [cite: 1]
+result <- predict(relation, a) [cite: 1]
+print(result) [cite: 1]
+
+# Plot the regression
+plot(y, x, col = "blue", main = "Height & Weight Regression", 
+     abline(lm(x ~ y)), cex = 1.3, pch = 16, xlab = "Weight in Kg", ylab = "Height in cm") [cite: 1]
+
+
+
+10
+# Load the required library
+library(party) [cite: 3]
+
+# Load specific data from the readingSkills dataset
+input.dat <- readingSkills[1:105, ] [cite: 3]
+
+# Create the decision tree
+# formula: nativeSpeaker ~ age + shoeSize + score
+output.tree <- ctree(nativeSpeaker ~ age + shoeSize + score, data = input.dat) [cite: 3]
+
+# Plot the tree
+plot(output.tree) [cite: 3]
