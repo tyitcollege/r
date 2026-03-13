@@ -1,0 +1,91 @@
+WebForm1.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" 
+    CodeBehind="WebForm1.aspx.cs" 
+    Inherits="WebApplication15.WebForm1" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Prime Number</title>
+</head>
+
+<body>
+    <h3>Archee Patel TYBSCIT040</h3>
+
+    <form id="form1" runat="server">
+        <div>
+
+            Enter a number:
+            <asp:TextBox ID="txtNum" runat="server"></asp:TextBox>
+            <br /><br />
+
+            <asp:Button 
+                ID="btnCheck" 
+                runat="server" 
+                Text="Check Prime" 
+                OnClick="btnCheck_Click" />
+            <br /><br />
+
+            <asp:Label 
+                ID="lblResult" 
+                runat="server">
+            </asp:Label>
+
+        </div>
+    </form>
+
+</body>
+</html>
+
+
+
+
+
+WebForm1.aspx.cs
+
+using System;
+using System.Web.UI;
+
+namespace WebApplication15
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnCheck_Click(object sender, EventArgs e)
+        {
+            int n = int.Parse(txtNum.Text);
+            bool isPrime = true;
+
+            if (n <= 1)
+            {
+                isPrime = false;
+            }
+            else
+            {
+                for (int i = 2; i <= Math.Sqrt(n); i++)
+                {
+                    if (n % i == 0)
+                    {
+                        isPrime = false;
+                        break;
+                    }
+                }
+            }
+
+            if (isPrime)
+            {
+                lblResult.Text = "Prime number";
+            }
+            else
+            {
+                lblResult.Text = "Not a prime number";
+            }
+        }
+    }
+}
+

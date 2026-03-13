@@ -1,0 +1,79 @@
+WebForm1.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" 
+    CodeBehind="WebForm1.aspx.cs" 
+    Inherits="WebApplication15.WebForm1" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Test for Vowel</title>
+</head>
+
+<body>
+    <h3>Archee Patel TYBSCIT040</h3>
+
+    <form id="form1" runat="server">
+        <div>
+
+            Enter a character:
+            <asp:TextBox 
+                ID="txt1" 
+                runat="server" 
+                MaxLength="1">
+            </asp:TextBox>
+            <br /><br />
+
+            <asp:Button 
+                ID="btnTest" 
+                runat="server" 
+                Text="Check Vowel" 
+                OnClick="btnTest_Click" />
+            <br /><br />
+
+            <asp:Label 
+                ID="lblResult" 
+                runat="server">
+            </asp:Label>
+
+        </div>
+    </form>
+
+</body>
+</html>
+
+
+
+
+
+WebForm1.aspx.cs
+
+using System;
+using System.Web.UI;
+
+namespace WebApplication15
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnTest_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txt1.Text))
+            {
+                lblResult.Text = "Please enter a character.";
+                return;
+            }
+
+            char ch = char.ToLower(txt1.Text[0]);
+
+            if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u')
+                lblResult.Text = "It is a vowel.";
+            else
+                lblResult.Text = "It is not a vowel.";
+        }
+    }
+}

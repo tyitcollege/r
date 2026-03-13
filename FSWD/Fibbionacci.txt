@@ -1,0 +1,77 @@
+WebForm1.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" 
+    CodeBehind="WebForm1.aspx.cs" 
+    Inherits="WebApplication15.WebForm1" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Fibonacci Series</title>
+</head>
+
+<body>
+    <h3>Archee Patel TYBSCIT040</h3>
+
+    <form id="form1" runat="server">
+        <div>
+
+            Enter number of terms:
+            <asp:TextBox ID="txt1" runat="server"></asp:TextBox>
+            <br /><br />
+
+            <asp:Button 
+                ID="btn" 
+                runat="server" 
+                Text="Show Fibonacci" 
+                OnClick="btn_Click" />
+            <br /><br />
+
+            <asp:Label 
+                ID="lbl1" 
+                runat="server">
+            </asp:Label>
+
+        </div>
+    </form>
+
+</body>
+</html>
+
+
+
+
+WebForm1.aspx.cs
+
+using System;
+using System.Web.UI;
+
+namespace WebApplication15
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btn_Click(object sender, EventArgs e)
+        {
+            int n = int.Parse(txt1.Text);
+
+            int a = 0, b = 1, c;
+            string result = "";
+
+            for (int i = 1; i <= n; i++)
+            {
+                result += a + " ";
+
+                c = a + b;
+                a = b;
+                b = c;
+            }
+
+            lbl1.Text = "Fibonacci series: " + result;
+        }
+    }
+}

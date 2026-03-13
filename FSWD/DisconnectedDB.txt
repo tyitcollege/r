@@ -1,0 +1,149 @@
+SQL Query
+CREATE DATABASE StudentDBs;
+GO
+
+USE StudentDB;
+
+CREATE TABLE Student2
+(
+    RollNo INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Course VARCHAR(50)
+);
+
+
+
+WebForm1.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs" Inherits="DisconnectedDB.WebForm1" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>Disconnected Architecture CRUD</title>
+</head>
+
+<body>
+<form id="form1" runat="server">
+
+    <h2>Student CRUD (Disconnected Architecture)</h2>
+
+    Roll No :
+    <asp:TextBox ID="txtRoll" runat="server"></asp:TextBox>
+    <br /><br />
+
+    Name :
+    <asp:TextBox ID="txtName" runat="server"></asp:TextBox>
+    <br /><br />
+
+    <asp:Button ID="btnSelect" runat="server" Text="Select" OnClick="btnSelect_Click" />
+    <asp:Button ID="btnInsert" runat="server" Text="Insert" OnClick="btnInsert_Click" />
+    <asp:Button ID="btnUpdate" runat="server" Text="Update" OnClick="btnUpdate_Click" />
+    <asp:Button ID="btnDelete" runat="server" Text="Delete" OnClick="btnDelete_Click" />
+
+    <br /><br />
+
+    <asp:Label ID="lblMsg" runat="server" ForeColor="Green"></asp:Label>
+
+    <br /><br />
+
+    <asp:GridView ID="GridView1" runat="server"></asp:GridView>
+
+</form>
+</body>
+</html>
+
+
+
+WebForm1.aspx.cs
+
+using System;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace DisconnectedDB
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        string cs = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StudentDBs;Integrated Security=True";
+
+        SqlConnection con;
+        SqlDataAdapter da;
+        DataSet ds;
+        SqlCommandBuilder cb;
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            // Always recreate connection and adapter
+            con = new SqlConnection(cs);
+            da = new SqlDataAdapter("SELECT * FROM Student3", con);
+            cb = new SqlCommandBuilder(da);
+
+            if (!IsPostBack)
+            {
+                ds = new DataSet();
+                da.Fill(ds, "Student3");
+
+                ViewState["ds"] = ds;
+            }
+            else
+            {
+                ds = (DataSet)ViewState["ds"];
+            }
+        }
+
+        protected void btnSelect_Click(object sender, EventArgs e)
+        {
+            GridView1.DataSource = ds.Tables["Student3"];
+            GridView1.DataBind();
+        }
+
+        protected void btnInsert_Click(object sender, EventArgs e)
+        {
+            DataRow dr = ds.Tables["Student3"].NewRow();
+
+            dr["RollNo"] = txtRoll.Text;
+            dr["Name"] = txtName.Text;
+
+            ds.Tables["Student3"].Rows.Add(dr);
+
+            da.Update(ds, "Student3");
+
+            lblMsg.Text = "Record Inserted Successfully";
+        }
+
+        protected void btnUpdate_Click(object sender, EventArgs e)
+        {
+            foreach (DataRow dr in ds.Tables["Student3"].Rows)
+            {
+                if (dr["RollNo"].ToString() == txtRoll.Text)
+                {
+                    dr["Name"] = txtName.Text;
+                }
+            }
+
+            da.Update(ds, "Student3");
+
+            lblMsg.Text = "Record Updated Successfully";
+        }
+
+        protected void btnDelete_Click(object sender, EventArgs e)
+        {
+            foreach (DataRow dr in ds.Tables["Student3"].Rows)
+            {
+                if (dr["RollNo"].ToString() == txtRoll.Text)
+                {
+                    dr.Delete();
+                }
+            }
+
+            da.Update(ds, "Student3");
+
+            lblMsg.Text = "Record Deleted Successfully";
+        }
+    }
+}
+
+
+
+

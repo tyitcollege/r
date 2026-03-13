@@ -1,0 +1,214 @@
+UserModel.cs
+
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+public class UserModel
+{
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; }
+
+    public string Name { get; set; }
+
+    public string Course { get; set; }
+}
+
+
+
+
+
+MongoDBHelper.cs
+
+using MongoDB.Driver;
+using System.Collections.Generic;
+
+public class MongoDBHelper
+{
+    IMongoDatabase db;
+
+    public MongoDBHelper()
+    {
+        var client = new MongoClient("mongodb+srv://arshiyafaisal:leekimv19@cluster0.prltjwz.mongodb.net/?appName=Cluster0");
+        db = client.GetDatabase("WebFormsDB_Prac7");
+    }
+
+    public IMongoCollection<UserModel> Users
+    {
+        get { return db.GetCollection<UserModel>("UsersCollection"); }
+    }
+
+    public void InsertUser(UserModel user)
+    {
+        Users.InsertOne(user);
+    }
+
+    public List<UserModel> GetAllUsers()
+    {
+        return Users.Find(u => true).ToList();
+    }
+
+    public void UpdateUser(string id, UserModel user)
+    {
+        Users.ReplaceOne(u => u.Id == id, user);
+    }
+
+    public void DeleteUser(string id)
+    {
+        Users.DeleteOne(u => u.Id == id);
+    }
+}
+
+
+
+
+
+WebFormCRUD.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebFormCRUD.aspx.cs" Inherits="pract7mongo2.WebFormCRUD" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>MongoDB CRUD Practical</title>
+</head>
+
+<body>
+<form id="form1" runat="server">
+
+<h2>MongoDB CRUD Practical</h2>
+
+Name:
+<asp:TextBox ID="txtName" runat="server"></asp:TextBox>
+
+<br /><br />
+
+Course:
+<asp:TextBox ID="txtCourse" runat="server"></asp:TextBox>
+
+<br /><br />
+
+<asp:Button ID="btnAdd" runat="server"
+Text="Add User"
+OnClick="btnAdd_Click" />
+
+<br /><br />
+
+<asp:GridView ID="GridView1"
+runat="server"
+AutoGenerateColumns="False"
+DataKeyNames="Id"
+OnRowEditing="GridView1_RowEditing"
+OnRowUpdating="GridView1_RowUpdating"
+OnRowDeleting="GridView1_RowDeleting"
+OnRowCancelingEdit="GridView1_RowCancelingEdit">
+
+<Columns>
+
+<asp:BoundField DataField="Name" HeaderText="Name" />
+
+<asp:BoundField DataField="Course" HeaderText="Course" />
+
+<asp:CommandField ShowEditButton="True"
+ShowDeleteButton="True" />
+
+</Columns>
+
+</asp:GridView>
+
+</form>
+</body>
+</html>
+
+
+
+
+
+
+WebFormCRUD.aspx.cs
+
+using System;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace pract7mongo2
+{
+    public partial class WebFormCRUD : System.Web.UI.Page
+    {
+        MongoDBHelper db = new MongoDBHelper();
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                LoadUsers();
+            }
+        }
+
+        void LoadUsers()
+        {
+            GridView1.DataSource = db.GetAllUsers();
+            GridView1.DataBind();
+        }
+
+        protected void btnAdd_Click(object sender, EventArgs e)
+        {
+            UserModel user = new UserModel
+            {
+                Name = txtName.Text,
+                Course = txtCourse.Text
+            };
+
+            db.InsertUser(user);
+
+            txtName.Text = "";
+            txtCourse.Text = "";
+
+            LoadUsers();
+        }
+
+        protected void GridView1_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+            GridView1.EditIndex = e.NewEditIndex;
+            LoadUsers();
+        }
+
+        protected void GridView1_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            GridView1.EditIndex = -1;
+            LoadUsers();
+        }
+
+        protected void GridView1_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            string id = GridView1.DataKeys[e.RowIndex].Value.ToString();
+
+            GridViewRow row = GridView1.Rows[e.RowIndex];
+
+            string name = ((TextBox)row.Cells[0].Controls[0]).Text;
+            string course = ((TextBox)row.Cells[1].Controls[0]).Text;
+
+            UserModel user = new UserModel
+            {
+                Id = id,
+                Name = name,
+                Course = course
+            };
+
+            db.UpdateUser(id, user);
+
+            GridView1.EditIndex = -1;
+
+            LoadUsers();
+        }
+
+        protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            string id = GridView1.DataKeys[e.RowIndex].Value.ToString();
+
+            db.DeleteUser(id);
+
+            LoadUsers();
+        }
+    }
+}

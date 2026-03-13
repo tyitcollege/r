@@ -1,0 +1,86 @@
+WebForm1.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" 
+    CodeBehind="WebForm1.aspx.cs" 
+    Inherits="WebApplication14.WebForm1" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+
+<body>
+    <h3>Archee Patel TYBSCIT040</h3>
+
+    <form id="form1" runat="server">
+        <div>
+
+            Enter 1st number:
+            <asp:TextBox ID="txt1" runat="server"></asp:TextBox>
+            <br /><br />
+
+            Enter 2nd number:
+            <asp:TextBox ID="txt2" runat="server"></asp:TextBox>
+            <br /><br />
+
+            Enter 3rd number:
+            <asp:TextBox ID="txt3" runat="server"></asp:TextBox>
+            <br /><br />
+
+            Enter 4th number:
+            <asp:TextBox ID="txt4" runat="server"></asp:TextBox>
+            <br /><br />
+
+            <asp:Button 
+                ID="btnProduct" 
+                runat="server" 
+                Text="Product" 
+                OnClick="btnProduct_Click" />
+            <br /><br />
+
+            <asp:Label 
+                ID="lblResult" 
+                runat="server">
+            </asp:Label>
+
+        </div>
+    </form>
+
+</body>
+</html>
+
+
+
+
+
+
+
+WebForm1.aspx.cs
+
+using System;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace WebApplication14
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnProduct_Click(object sender, EventArgs e)
+        {
+            int n1 = int.Parse(txt1.Text);
+            int n2 = int.Parse(txt2.Text);
+            int n3 = int.Parse(txt3.Text);
+            int n4 = int.Parse(txt4.Text);
+
+            int product = n1 * n2 * n3 * n4;
+
+            lblResult.Text = "Product = " + product;
+        }
+    }
+}

@@ -1,0 +1,76 @@
+WebForm1.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" 
+    CodeBehind="WebForm1.aspx.cs" 
+    Inherits="WebApplication15.WebForm1" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Reverse and Sum of Digits</title>
+</head>
+
+<body>
+    <h3>Archee Patel TYBSCIT040</h3>
+
+    <form id="form1" runat="server">
+        <div>
+
+            Enter a number:
+            <asp:TextBox ID="txtNum" runat="server"></asp:TextBox>
+            <br /><br />
+
+            <asp:Button 
+                ID="btnCalc" 
+                runat="server" 
+                Text="Calculate" 
+                OnClick="btnCalc_Click" />
+            <br /><br />
+
+            <asp:Label 
+                ID="lblResult" 
+                runat="server">
+            </asp:Label>
+
+        </div>
+    </form>
+
+</body>
+</html>
+
+
+
+
+WebForm1.aspx.cs
+
+using System;
+using System.Web.UI;
+
+namespace WebApplication15
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnCalc_Click(object sender, EventArgs e)
+        {
+            int num = int.Parse(txtNum.Text);
+            int original = num;
+
+            int rev = 0, sum = 0;
+
+            while (num != 0)
+            {
+                int digit = num % 10;
+                sum += digit;
+                rev = rev * 10 + digit;
+                num /= 10;
+            }
+
+            lblResult.Text = "Reversed: " + rev + "<br/>Sum of digits: " + sum;
+        }
+    }
+}

@@ -1,0 +1,150 @@
+SQLQuery1.sql
+
+CREATE DATABASE StudentDBs;
+GO
+
+USE StudentDB;
+
+CREATE TABLE Student2
+(
+    RollNo INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Course VARCHAR(50)
+);
+
+
+
+
+
+
+WebForm1.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs" Inherits="StudentCRUD.WebForm1" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>Student CRUD</title>
+</head>
+<body>
+<form id="form1" runat="server">
+
+    <h2>Student CRUD Operations</h2>
+
+    Roll No :
+    <asp:TextBox ID="txtRoll" runat="server"></asp:TextBox>
+    <br /><br />
+
+    Name :
+    <asp:TextBox ID="txtName" runat="server"></asp:TextBox>
+    <br /><br />
+
+    Course :
+    <asp:TextBox ID="txtCourse" runat="server"></asp:TextBox>
+    <br /><br />
+
+    <asp:Button ID="btnInsert" runat="server" Text="Insert" OnClick="btnInsert_Click" />
+    <asp:Button ID="btnSelect" runat="server" Text="Select" OnClick="btnSelect_Click" />
+    <asp:Button ID="btnUpdate" runat="server" Text="Update" OnClick="btnUpdate_Click" />
+    <asp:Button ID="btnDelete" runat="server" Text="Delete" OnClick="btnDelete_Click" />
+
+    <br /><br />
+
+    <asp:Label ID="lblMsg" runat="server" ForeColor="Green"></asp:Label>
+
+    <br /><br />
+
+    <asp:GridView ID="GridView1" runat="server"></asp:GridView>
+
+</form>
+</body>
+</html>
+
+
+WebForm1.aspx.cs
+
+using System;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace StudentCRUD
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        string cs = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=StudentDB;Integrated Security=True";
+
+        protected void btnInsert_Click(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection(cs);
+            con.Open();
+
+            SqlCommand cmd = new SqlCommand(
+            "insert into Student values(@r,@n,@c)", con);
+
+            cmd.Parameters.AddWithValue("@r", txtRoll.Text);
+            cmd.Parameters.AddWithValue("@n", txtName.Text);
+            cmd.Parameters.AddWithValue("@c", txtCourse.Text);
+
+            cmd.ExecuteNonQuery();
+
+            lblMsg.Text = "Record Inserted Successfully";
+
+            con.Close();
+        }
+
+        protected void btnSelect_Click(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection(cs);
+            con.Open();
+
+            SqlCommand cmd = new SqlCommand(
+            "select * from Student", con);
+
+            SqlDataReader dr = cmd.ExecuteReader();
+
+            GridView1.DataSource = dr;
+            GridView1.DataBind();
+
+            con.Close();
+        }
+
+        protected void btnUpdate_Click(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection(cs);
+            con.Open();
+
+            SqlCommand cmd = new SqlCommand(
+            "update Student set Name=@n, Course=@c where RollNo=@r", con);
+
+            cmd.Parameters.AddWithValue("@r", txtRoll.Text);
+            cmd.Parameters.AddWithValue("@n", txtName.Text);
+            cmd.Parameters.AddWithValue("@c", txtCourse.Text);
+
+            cmd.ExecuteNonQuery();
+
+            lblMsg.Text = "Record Updated Successfully";
+
+            con.Close();
+        }
+
+        protected void btnDelete_Click(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection(cs);
+            con.Open();
+
+            SqlCommand cmd = new SqlCommand(
+            "delete from Student where RollNo=@r", con);
+
+            cmd.Parameters.AddWithValue("@r", txtRoll.Text);
+
+            cmd.ExecuteNonQuery();
+
+            lblMsg.Text = "Record Deleted Successfully";
+
+            con.Close();
+        }
+    }
+}
+
+
+

@@ -1,0 +1,67 @@
+WebForm1.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" 
+    CodeBehind="WebForm1.aspx.cs" 
+    Inherits="WebApplication15.WebForm1" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Temperature Converter</title>
+</head>
+
+<body>
+    <h3>Archee Patel TYBSCIT040</h3>
+
+    <form id="form1" runat="server">
+        <div>
+
+            Enter temperature in Celsius:
+            <asp:TextBox ID="txt1" runat="server"></asp:TextBox>
+            <br /><br />
+
+            <asp:Button 
+                ID="btnTemp" 
+                runat="server" 
+                Text="Convert" 
+                OnClick="btnTemp_Click" />
+            <br /><br />
+
+            <asp:Label 
+                ID="lblResult" 
+                runat="server">
+            </asp:Label>
+
+        </div>
+    </form>
+
+</body>
+</html>
+
+
+
+WebForm1.aspx.cs
+
+using System;
+using System.Web.UI;
+
+namespace WebApplication15
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnTemp_Click(object sender, EventArgs e)
+        {
+            double c = double.Parse(txt1.Text);
+
+            double f = (c * 9) / 5 + 32;
+
+            lblResult.Text = "Temperature in Fahrenheit = " + f;
+        }
+    }
+}
+

@@ -1,0 +1,93 @@
+WebForm1.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" 
+    CodeBehind="WebForm1.aspx.cs" 
+    Inherits="WebApplication15.WebForm1" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Quadratic Equation</title>
+</head>
+
+<body>
+    <h3>Archee Patel TYBSCIT040</h3>
+
+    <form id="form1" runat="server">
+        <div>
+
+            a:
+            <asp:TextBox ID="txtA" runat="server"></asp:TextBox>
+            <br /><br />
+
+            b:
+            <asp:TextBox ID="txtB" runat="server"></asp:TextBox>
+            <br /><br />
+
+            c:
+            <asp:TextBox ID="txtC" runat="server"></asp:TextBox>
+            <br /><br />
+
+            <asp:Button 
+                ID="btnRoots" 
+                runat="server" 
+                Text="Find Roots" 
+                OnClick="btnRoots_Click" />
+            <br /><br />
+
+            <asp:Label 
+                ID="lblResult" 
+                runat="server">
+            </asp:Label>
+
+        </div>
+    </form>
+
+</body>
+</html>
+
+
+
+
+WebForm1.asp.cs
+
+using System;
+using System.Web.UI;
+
+namespace WebApplication15
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnRoots_Click(object sender, EventArgs e)
+        {
+            double a = double.Parse(txtA.Text);
+            double b = double.Parse(txtB.Text);
+            double c = double.Parse(txtC.Text);
+
+            double d = b * b - 4 * a * c;
+
+            if (d > 0)
+            {
+                double r1 = (-b + Math.Sqrt(d)) / (2 * a);
+                double r2 = (-b - Math.Sqrt(d)) / (2 * a);
+
+                lblResult.Text = "Two real roots: " + r1 + " and " + r2;
+            }
+            else if (d == 0)
+            {
+                double r = -b / (2 * a);
+
+                lblResult.Text = "One real root: " + r;
+            }
+            else
+            {
+                lblResult.Text = "Roots are imaginary (no real solution).";
+            }
+        }
+    }
+}

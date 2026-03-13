@@ -1,0 +1,63 @@
+WebForm1.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs" Inherits="Practical6A.WebForm1" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>AngularJS Greeting Demo</title>
+
+    <script src="Scripts/angular.js"></script>
+    <script src="Scripts/app.js"></script>
+    <script src="Scripts/controller.js"></script>
+</head>
+
+<body>
+<form id="form1" runat="server">
+
+<div ng-app="myangular" ng-controller="MyControl">
+
+    <p>FS TYBSCIT040</p>
+
+    <label for="nameTxt">Enter your name here:</label>
+
+    <input type="text"
+           id="nameTxt"
+           ng-model="name"
+           ng-change="updateGreeting()" />
+
+    <h3>Output: {{ greeting }}</h3>
+
+    <p ng-bind="greeting"></p>
+
+</div>
+
+</form>
+</body>
+</html>
+
+
+
+
+
+
+app.js
+
+var app = angular.module("myangular", []);
+
+
+
+
+
+controller.js
+app.controller("MyControl", function ($scope) {
+
+    $scope.name = "XYZ";
+
+    $scope.updateGreeting = function () {
+        $scope.greeting = "Hello, " + $scope.name + "!";
+    };
+
+    $scope.updateGreeting();
+
+});

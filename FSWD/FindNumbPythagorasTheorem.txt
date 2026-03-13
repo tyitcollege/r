@@ -1,0 +1,73 @@
+WebForm1.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" 
+    CodeBehind="WebForm1.aspx.cs" 
+    Inherits="WebApplication15.WebForm1" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Pythagoras Theorem</title>
+</head>
+
+<body>
+    <h3>Archee Patel TYBSCIT040</h3>
+
+    <form id="form1" runat="server">
+        <div>
+
+            Side a:
+            <asp:TextBox ID="txtA" runat="server"></asp:TextBox>
+            <br /><br />
+
+            Side b:
+            <asp:TextBox ID="txtB" runat="server"></asp:TextBox>
+            <br /><br />
+
+            <asp:Button 
+                ID="btnCalculate" 
+                runat="server" 
+                Text="Calculate" 
+                OnClick="btnCalculate_Click" />
+            <br /><br />
+
+            <asp:Label 
+                ID="lblResult" 
+                runat="server">
+            </asp:Label>
+
+        </div>
+    </form>
+
+</body>
+</html>
+
+
+
+
+WebForm1.aspx.cs
+
+
+using System;
+using System.Web.UI;
+
+namespace WebApplication15
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnCalculate_Click(object sender, EventArgs e)
+        {
+            double a = double.Parse(txtA.Text);
+            double b = double.Parse(txtB.Text);
+
+            double c = Math.Sqrt(a * a + b * b);
+
+            lblResult.Text = "Hypotenuse = " + c.ToString("0.00");
+        }
+    }
+}

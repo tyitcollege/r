@@ -1,0 +1,117 @@
+Class1.cs
+
+using System;
+
+namespace DLLProject1
+{
+    public class Calculator
+    {
+        public int Subtract(int a, int b)
+        {
+            return a - b;
+        }
+
+        public int Add(int a, int b)
+        {
+            return a + b;
+        }
+    }
+}
+
+
+
+
+
+
+DLL_prac.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" 
+    CodeBehind="DLL_prac.aspx.cs" 
+    Inherits="Practicals.DLL_prac" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>DLL Practical</title>
+</head>
+
+<body>
+    <form id="form1" runat="server">
+
+        <h1>Kripa Joshi TYBSCIT024</h1>
+
+        Enter First Number :
+        <asp:TextBox ID="num1" runat="server"></asp:TextBox>
+        <br /><br />
+
+        Enter Second Number :
+        <asp:TextBox ID="num2" runat="server"></asp:TextBox>
+        <br /><br />
+
+        <asp:Button 
+            ID="btnSubtract" 
+            runat="server" 
+            Text="Subtract" 
+            OnClick="btnSubtract_Click" />
+
+        <br />
+
+        <asp:Button 
+            ID="btnadd" 
+            runat="server" 
+            Text="Add" 
+            OnClick="btnadd_Click" />
+
+        <br /><br />
+
+        Subtract :
+        <asp:Label ID="lblResult" runat="server"></asp:Label>
+
+        <br />
+
+        Sum :
+        <asp:Label ID="lbladd" runat="server"></asp:Label>
+
+    </form>
+</body>
+</html>
+
+
+
+
+DLL_prac.aspx.cs
+
+using DLLProject1;
+using System;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Practicals
+{
+    public partial class DLL_prac : System.Web.UI.Page
+    {
+        protected void btnSubtract_Click(object sender, EventArgs e)
+        {
+            Calculator obj = new Calculator();
+
+            int a = int.Parse(num1.Text);
+            int b = int.Parse(num2.Text);
+
+            int result = obj.Subtract(a, b);
+
+            lblResult.Text = result.ToString();
+        }
+
+        protected void btnadd_Click(object sender, EventArgs e)
+        {
+            Calculator obj = new Calculator();
+
+            int a = int.Parse(num1.Text);
+            int b = int.Parse(num2.Text);
+
+            int sum = obj.Add(a, b);
+
+            lbladd.Text = sum.ToString();
+        }
+    }
+}

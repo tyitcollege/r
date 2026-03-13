@@ -1,0 +1,100 @@
+WebForm1.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" 
+    CodeBehind="WebForm1.aspx.cs" 
+    Inherits="WebApplication15.WebForm1" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+
+<body>
+    <h3>Archee Patel TYBSCIT040</h3>
+
+    <form id="form1" runat="server">
+        <div>
+
+            Name:
+            <asp:TextBox ID="txtName" runat="server"></asp:TextBox>
+            <br /><br />
+
+            Phone:
+            <asp:TextBox ID="txtPhone" runat="server"></asp:TextBox>
+            <br /><br />
+
+            <asp:Button 
+                ID="btnAdd" 
+                runat="server" 
+                Text="Add Contact" 
+                OnClick="btnAdd_Click" />
+            <br /><br />
+
+            Contacts:<br />
+
+            <asp:ListBox 
+                ID="lstContacts" 
+                runat="server" 
+                Width="250px" 
+                Height="150px">
+            </asp:ListBox>
+
+        </div>
+    </form>
+
+</body>
+</html>
+
+
+
+
+
+WebForm1.aspx.cs
+
+using System;
+using System.Collections.Generic;
+using System.Web.UI;
+
+namespace WebApplication15
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        private List<string> Contacts
+        {
+            get
+            {
+                if (Session["Contacts"] == null)
+                    Session["Contacts"] = new List<string>();
+
+                return (List<string>)Session["Contacts"];
+            }
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                lstContacts.DataSource = Contacts;
+                lstContacts.DataBind();
+            }
+        }
+
+        protected void btnAdd_Click(object sender, EventArgs e)
+        {
+            string name = txtName.Text.Trim();
+            string phone = txtPhone.Text.Trim();
+
+            if (name != "" && phone != "")
+            {
+                Contacts.Add(name + " - " + phone);
+
+                lstContacts.DataSource = Contacts;
+                lstContacts.DataBind();
+
+                txtName.Text = "";
+                txtPhone.Text = "";
+            }
+        }
+    }
+}
