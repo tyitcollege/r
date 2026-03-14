@@ -1,0 +1,151 @@
+Default.aspx
+
+<%@ Page Language="C#" AutoEventWireup="true" 
+    CodeBehind="Default.aspx.cs" 
+    Inherits="WebApplication18.Default" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>MongoDB CRUD</title>
+</head>
+
+<body>
+    <form id="form1" runat="server">
+
+        <h2>Student MongoDB CRUD</h2>
+
+        Roll No :
+        <asp:TextBox ID="txtRoll" runat="server"></asp:TextBox>
+        <br /><br />
+
+        Name :
+        <asp:TextBox ID="txtName" runat="server"></asp:TextBox>
+        <br /><br />
+
+        Course :
+        <asp:TextBox ID="txtCourse" runat="server"></asp:TextBox>
+        <br /><br />
+
+        <asp:Button 
+            ID="btnInsert" 
+            runat="server" 
+            Text="Insert" 
+            OnClick="btnInsert_Click" />
+
+        <asp:Button 
+            ID="btnSelect" 
+            runat="server" 
+            Text="Select" 
+            OnClick="btnSelect_Click" />
+
+        <asp:Button 
+            ID="btnUpdate" 
+            runat="server" 
+            Text="Update" 
+            OnClick="btnUpdate_Click" />
+
+        <asp:Button 
+            ID="btnDelete" 
+            runat="server" 
+            Text="Delete" 
+            OnClick="btnDelete_Click" />
+
+        <br /><br />
+
+        <asp:Label 
+            ID="lblMsg" 
+            runat="server" 
+            ForeColor="Green">
+        </asp:Label>
+
+        <br /><br />
+
+        <asp:GridView 
+            ID="GridView1" 
+            runat="server" 
+            AutoGenerateColumns="true">
+        </asp:GridView>
+
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+Default.aspx.cs
+
+using MongoDB.Driver;
+using System;
+using System.Collections.Generic;
+
+namespace WebApplication18
+{
+    public partial class Default : System.Web.UI.Page
+    {
+        MongoClient client = new MongoClient("mongodb://localhost:27017");
+        IMongoDatabase db;
+        IMongoCollection<Student> collection;
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            db = client.GetDatabase("StudentDB");
+            collection = db.GetCollection<Student>("students");
+        } 
+        protected void btnInsert_Click(object sender, EventArgs e)
+        {
+            Student s = new Student
+            {
+                RollNo = int.Parse(txtRoll.Text),
+                Name = txtName.Text,
+                Course = txtCourse.Text
+            };
+
+            collection.InsertOne(s);
+            lblMsg.Text = "Inserted Successfully";
+        }
+
+        protected void btnSelect_Click(object sender, EventArgs e)
+        {
+            var list = collection.Find(_ => true).ToList();
+            GridView1.DataSource = list;
+            GridView1.DataBind();
+        }
+
+        protected void btnUpdate_Click(object sender, EventArgs e)
+        {
+            var filter = Builders<Student>.Filter.Eq("RollNo", int.Parse(txtRoll.Text));
+
+            var update = Builders<Student>.Update
+                .Set("Name", txtName.Text)
+                .Set("Course", txtCourse.Text);
+
+            collection.UpdateOne(filter, update);
+
+            lblMsg.Text = "Updated Successfully";
+        }
+
+        protected void btnDelete_Click(object sender, EventArgs e)
+        {
+            var filter = Builders<Student>.Filter.Eq("RollNo", int.Parse(txtRoll.Text));
+
+            collection.DeleteOne(filter);
+
+            lblMsg.Text = "Deleted Successfully";
+        }
+    }
+
+    public class Student
+    {
+        public int RollNo { get; set; }
+        public string Name { get; set; }
+        public string Course { get; set; }
+    }
+}
+
+
+
+
