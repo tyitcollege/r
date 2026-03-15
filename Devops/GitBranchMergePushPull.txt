@@ -1,0 +1,10 @@
+git branch feature-branch
+git checkout feature-branch
+echo Feature work >> file.txt
+git add .
+git commit -m "Feature branch update"
+git checkout main
+git merge feature-branch
+git remote add origin https://github.com/username/repo.git
+git push -u origin main
+git pull origin main

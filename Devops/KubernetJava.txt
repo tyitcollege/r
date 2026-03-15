@@ -1,0 +1,67 @@
+EvenOdd.java
+
+public class EvenOdd {
+    public static void main(String[] args) {
+
+        int num = 7;
+
+        if(num % 2 == 0) {
+            System.out.println(num + " is an even number");
+        } else {
+            System.out.println(num + " is an odd number");
+        }
+
+        try {
+            Thread.sleep(3600000); // keeps container alive for logs
+        } catch(Exception e) {}
+    }
+}
+
+
+Dockerfile
+
+FROM eclipse-temurin:17-jdk
+
+WORKDIR /app
+
+COPY EvenOdd.java .
+
+RUN javac EvenOdd.java
+
+CMD ["java","EvenOdd"]
+
+
+
+java-evenodd-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-evenodd-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-evenodd
+  template:
+    metadata:
+      labels:
+        app: java-evenodd
+    spec:
+      containers:
+      - name: java-evenodd-container
+        image: arshiyafaisal/java-evenodd-k8s:1.0
+
+
+
+
+
+
+
+docker build -t java-evenodd-k8s:1.0 .
+docker tag java-evenodd-k8s:1.0 arshiyafaisal/java-evenodd-k8s:1.0
+docker push arshiyafaisal/java-evenodd-k8s:1.0
+kubectl apply -f java-evenodd-deployment.yaml
+kubectl get pods
+kubectl logs <pod-name>
+kubectl delete -f java-evenodd-deployment.yaml

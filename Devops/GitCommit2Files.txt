@@ -1,0 +1,10 @@
+git init
+git status
+echo Hello Practical 01 > file.txt
+git add file.txt
+git commit -m "Initial commit"
+git log
+echo Second Line >> file.txt
+git add .
+git commit -m "Added second line"
+git log

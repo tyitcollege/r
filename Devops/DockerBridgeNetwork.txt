@@ -1,0 +1,36 @@
+Eg1.java
+
+public class Eg1{
+    public static void main(String args[]){
+        int a = 5;
+
+        if (a % 2 == 0){
+            System.out.println("Even");
+        }
+        else{
+            System.out.println("Odd");
+        }
+    }
+}
+
+
+
+Dockerfile
+
+FROM eclipse-temurin:17-jdk
+
+WORKDIR /devoops/app
+
+COPY Eg1.java ./
+
+RUN javac Eg1.java
+
+CMD ["java", "Eg1"]
+
+
+
+
+docker build -t java-user-bscit .
+docker network create my_network_bscit
+docker network ls
+docker run -it --rm --name odd_even_bscit --network my_network_bscit java-user-bscit

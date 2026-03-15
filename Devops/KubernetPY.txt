@@ -1,0 +1,64 @@
+area_of_circle.py
+
+import sys
+import math
+import time
+
+radius = 5.0
+
+if len(sys.argv) > 1:
+    radius = float(sys.argv[1])
+
+area = math.pi * radius ** 2
+print(f"The area of a circle with radius {radius} is: {area}", flush=True)
+
+time.sleep(3600)
+
+
+
+
+Dockerfile
+
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY area_of_circle.py .
+
+CMD ["python","-u","area_of_circle.py","10"]
+
+
+
+circle-area-python-deployment.yml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: circle-area-python-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: circle-area-python
+  template:
+    metadata:
+      labels:
+        app: circle-area-python
+    spec:
+      containers:
+      - name: circle-area-python-container
+        image: arshiyafaisal/circle-area-python:1.0
+
+
+
+
+
+
+
+docker build -t java-evenodd-k8s:1.0 .
+docker tag java-evenodd-k8s:1.0 arshiyafaisal/java-evenodd-k8s:1.0
+docker push arshiyafaisal/java-evenodd-k8s:1.0
+kubectl apply -f java-evenodd-deployment.yaml
+kubectl get pods
+kubectl logs <pod-name>
+kubectl delete -f java-evenodd-deployment.yaml

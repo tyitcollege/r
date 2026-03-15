@@ -1,0 +1,46 @@
+eg1.java
+
+public class eg1 {
+    public static void main(String args[]) {
+        int a = 7;
+
+        if(a % 2 == 0) {
+            System.out.println(a + " is an even number");
+        } 
+        else {
+            System.out.println(a + " is an odd number");
+        }
+
+        try {
+            Thread.sleep(60000); // keep container running for 60 seconds
+        } catch (Exception e) {}
+    }
+}
+
+
+Dockerfile
+
+FROM eclipse-temurin:17-jdk
+
+WORKDIR /app
+
+COPY eg1.java ./
+
+RUN javac eg1.java
+ 
+CMD ["java","eg1"]
+
+
+
+
+
+
+docker build -t java-even-odd:1.0 .
+docker run -it java-even-odd:1.0
+docker swarm init
+docker service create --name evenodd-service java-even-odd:1.0
+docker service ls
+docker service ps evenodd-service
+docker service logs evenodd-service
+docker service scale evenodd-service=3
+docker service rm evenodd-service

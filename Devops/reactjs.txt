@@ -1,0 +1,61 @@
+Server.js
+
+const express = require("express");
+
+const app = express();
+const PORT = 3000;
+
+app.get("/", (req, res) => {
+    res.send("Hello World");
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
+
+
+Dockerfile
+
+FROM node:22-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install --omit=dev
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["node", "Server.js"]
+
+
+
+package.json{}
+
+{
+  "name": "user-bscit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
+
+
+
+
+
+npm init -y
+npm install express
+docker build -t node-user-bscit .
+docker run -p 3000:3000 node-user-bscit

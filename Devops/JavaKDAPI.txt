@@ -1,0 +1,122 @@
+OddEvenServer.java 
+
+import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpExchange;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+
+public class OddEvenServer {
+
+    public static void main(String[] args) throws Exception {
+
+        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+
+        server.createContext("/check", new MyHandler());
+
+        server.setExecutor(null);
+        server.start();
+
+        System.out.println("Server running on port 8080");
+    }
+
+    static class MyHandler implements HttpHandler {
+
+        public void handle(HttpExchange exchange) throws IOException {
+
+            String query = exchange.getRequestURI().getQuery();
+            int number = Integer.parseInt(query.split("=")[1]);
+
+            String response;
+
+            if (number % 2 == 0)
+                response = number + " is Even";
+            else
+                response = number + " is Odd";
+
+            exchange.sendResponseHeaders(200, response.length());
+
+            OutputStream os = exchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }
+    }
+}
+
+
+
+
+
+Dockerfile
+
+FROM eclipse-temurin:17-jdk-alpine
+
+WORKDIR /app
+
+COPY OddEvenServer.java .
+
+RUN javac OddEvenServer.java
+
+EXPOSE 8080
+
+CMD ["java","OddEvenServer"]
+
+
+
+
+
+
+deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odd-even-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: odd-even
+  template:
+    metadata:
+      labels:
+        app: odd-even
+    spec:
+      containers:
+      - name: odd-even-container
+        image: arshiyafaisal/odd-even-app:1.0
+        ports:
+        - containerPort: 8080
+
+
+
+
+service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: odd-even-service
+spec:
+  type: NodePort
+  selector:
+    app: odd-even
+  ports:
+  - port: 8080
+    targetPort: 8080
+    nodePort: 30008
+
+
+
+
+
+
+docker build -t odd-even-app:1.0 .
+docker tag odd-even-app:1.0 arshiyafaisal/odd-even-app:1.0
+docker push arshiyafaisal/odd-even-app:1.0
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+kubectl get pods
+kubectl get nodes -o wide
